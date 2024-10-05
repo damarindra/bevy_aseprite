@@ -80,7 +80,7 @@ fn change_animation(
         }
     }
 
-    if keys.pressed(KeyCode::S) {
+    if keys.pressed(KeyCode::KeyS) {
         for mut crow_anim in aseprites.p0().iter_mut() {
             crow_anim.custom_size = Some(crow_anim.custom_size.unwrap_or(Vec2::splat(40.)) + Vec2::splat(- 2.));
         }
@@ -89,7 +89,7 @@ fn change_animation(
         }
     }
 
-    if keys.pressed(KeyCode::W) {
+    if keys.pressed(KeyCode::KeyW) {
         for mut crow_anim in aseprites.p0().iter_mut() {
             crow_anim.custom_size = Some(crow_anim.custom_size.unwrap_or(Vec2::splat(40.)) + Vec2::splat(2.));
         }
@@ -169,7 +169,7 @@ fn setup_text(mut commands: Commands, asset_server: Res<AssetServer>) {
                 TextSection {
                     value: String::from("meitdev"),
                     style: TextStyle {
-                        color: Color::LIME_GREEN,
+                        color: bevy::prelude::Color::Srgba(bevy::color::palettes::css::LIMEGREEN),
                         ..credits_text_style.clone()
                     },
                 },
@@ -201,7 +201,7 @@ fn setup_text(mut commands: Commands, asset_server: Res<AssetServer>) {
                 TextSection {
                     value: String::from("shubibubi"),
                     style: TextStyle {
-                        color: Color::BLUE,
+                        color: bevy::prelude::Color::Srgba(bevy::color::palettes::css::BLUE),
                         ..credits_text_style.clone()
                     },
                 },

@@ -209,9 +209,9 @@ impl AsepriteAnimation {
 pub(crate) fn update_animations(
     time: Res<Time>,
     aseprites: Res<Assets<Aseprite>>,
-    mut aseprites_query: Query<(&Handle<Aseprite>, &mut AsepriteAnimation, &mut TextureAtlas)>,
+    mut aseprites_query: Query<(&Handle<Aseprite>, &mut AsepriteAnimation, &mut TextureAtlas, &mut Sprite)>,
 ) {
-    for (handle, mut animation, mut sprite) in aseprites_query.iter_mut() {
+    for (handle, mut animation, mut atlas, mut sprite) in aseprites_query.iter_mut() {
         let aseprite = match aseprites.get(handle) {
             Some(aseprite) => aseprite,
             None => {
@@ -230,7 +230,7 @@ pub(crate) fn update_animations(
         sprite.custom_size = animation.custom_size;
 
         if animation.update(info, time.delta()) {
-            sprite.index = aseprite.frame_to_idx[animation.current_frame];
+            atlas.index = aseprite.frame_to_idx[animation.current_frame];
         }
     }
 }

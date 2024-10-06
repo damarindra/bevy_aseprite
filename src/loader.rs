@@ -1,4 +1,4 @@
-use crate::{anim::AsepriteAnimation, error, Aseprite};
+use crate::{anim::AsepriteAnimation, error, Aseprite, AsepriteAnchor};
 use bevy::{
     asset::{AssetLoader, AsyncReadExt},
     prelude::*,
@@ -135,11 +135,11 @@ pub(crate) fn insert_sprite_sheet(
     mut commands: Commands,
     aseprites: ResMut<Assets<Aseprite>>,
     mut query: Query<
-        (Entity, &Transform, &Handle<Aseprite>),
+        (Entity, &Transform, &Handle<Aseprite>, &AsepriteAnchor),
         (Without<TextureAtlas>, With<AsepriteAnimation>),
     >,
 ) {
-    for (entity, &transform, handle) in query.iter_mut() {
+    for (entity, &transform, handle, anchor) in query.iter_mut() {
         // FIXME The first time the query runs the aseprite atlas might not be ready
         // so failing to find it is expected.
         let aseprite = match aseprites.get(handle) {
@@ -149,7 +149,7 @@ pub(crate) fn insert_sprite_sheet(
                 continue;
             }
         };
-        let mut atlas = match aseprite.atlas.clone() {
+        let atlas = match aseprite.atlas.clone() {
             Some(atlas) => atlas,
             None => {
                 debug!("Aseprite atlas not ready");
@@ -163,14 +163,20 @@ pub(crate) fn insert_sprite_sheet(
                 continue;
             }
         };
-        commands.entity(entity).insert(SpriteSheetBundle {
-            atlas: TextureAtlas {
+        commands.entity(entity).insert((
+			SpriteBundle {
+				texture: image,
+				transform,
+				sprite: Sprite {
+					anchor: anchor.0,
+					..default()
+				},
+				..Default::default()
+			},
+            TextureAtlas {
                 layout: atlas,
                 index: 0,
             },
-            texture: image,
-            transform,
-            ..Default::default()
-        });
+		));
     }
 }

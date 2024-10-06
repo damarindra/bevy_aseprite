@@ -38,6 +38,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                 translation: Vec3::new(0., 80., 0.),
                 ..Default::default()
             },
+			anchor: bevy_aseprite::AsepriteAnchor(bevy::sprite::Anchor::CenterLeft),
             ..Default::default()
         })
         .insert(CrowTag);

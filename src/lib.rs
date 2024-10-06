@@ -13,10 +13,11 @@ use bevy::{
         bundle::Bundle,
         schedule::{IntoSystemConfigs, SystemSet},
     },
-    reflect::TypePath,
-    render::texture::Image,
-    sprite::TextureAtlasLayout,
-    transform::components::{GlobalTransform, Transform},
+	prelude::Component,
+	reflect::{Reflect, TypePath},
+	render::texture::Image,
+	sprite::{Anchor, TextureAtlasLayout},
+	transform::components::{GlobalTransform, Transform}
 };
 
 use bevy_aseprite_reader as reader;
@@ -32,10 +33,14 @@ enum AsepriteSystems {
     InsertSpriteSheet,
 }
 
+#[derive(Component, Debug, Default, Reflect)]
+pub struct AsepriteAnchor(pub Anchor);
+
 impl Plugin for AsepritePlugin {
     fn build(&self, app: &mut bevy::prelude::App) {
         app.init_asset::<Aseprite>()
             .register_asset_loader(loader::AsepriteLoader)
+			.register_type::<AsepriteAnchor>()
             .add_systems(Update, loader::process_load)
             .add_systems(
                 Update,
@@ -70,4 +75,5 @@ pub struct AsepriteBundle {
     pub global_transform: GlobalTransform,
     pub animation: AsepriteAnimation,
     pub aseprite: Handle<Aseprite>,
+	pub anchor: AsepriteAnchor,
 }
